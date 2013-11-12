@@ -449,7 +449,7 @@ finishedSavingWithError:(NSError *)error
             [bubbleImage setFrame:CGRectMake(50,5, itemTextSize.width+18, textHeight+4)];
             bubbleImage.tag=56;
             //CGRectMake(260 - itemTextSize.width+5,2,itemTextSize.width+10, textHeight-2)];
-            UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(55,2,itemTextSize.width+10, textHeight-2)];
+            UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(60,2,itemTextSize.width+10, textHeight-2)];
             [cell.contentView addSubview:messageTextview];
             messageTextview.editable=NO;
             messageTextview.text = messageText;
@@ -459,7 +459,7 @@ finishedSavingWithError:(NSError *)error
             messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:12.0];
             messageTextview.scrollEnabled=NO;
             messageTextview.tag=indexPath.row;
-            
+            messageTextview.textColor=[UIColor whiteColor];
             cell.Avatar_Image.layer.cornerRadius = 20.0;
             cell.Avatar_Image.layer.masksToBounds = YES;
             cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -518,7 +518,7 @@ finishedSavingWithError:(NSError *)error
                 cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
                 cell.Avatar_Image.layer.borderWidth = 2.0;
                 [cell.Avatar_Image setupImageViewer];
-                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
                 [cell.message_Image setupImageViewer];
                 cell.Avatar_Image.image=[UIImage imageNamed:@"Customer_icon"];
                 cell.time_Label.text=feed_data.messageTime;
@@ -539,7 +539,7 @@ finishedSavingWithError:(NSError *)error
                 }
                 
                 [cell.message_Image setupImageViewer];
-                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
                 cell.message_Image.image=[UIImage imageNamed:@"my_icon"];
                 
                 cell.Avatar_Image.layer.cornerRadius = 20.0;
@@ -604,14 +604,14 @@ finishedSavingWithError:(NSError *)error
     {
         SPHBubbleCellOther *mycell=(SPHBubbleCellOther*)[self.sphChatTable cellForRowAtIndexPath:indexPath];
         UIImageView *bubbleImage=(UIImageView *)[mycell viewWithTag:55];
-        bubbleImage.image=[[UIImage imageNamed:@"Bubbletyperight_highlight"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+        bubbleImage.image=[[UIImage imageNamed:@"Bubbletyperight_highlight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
     }else
         if ([feed_data.messageType isEqualToString:@"textbyother"])
         {
             SPHBubbleCell *mycell=(SPHBubbleCell*)[self.sphChatTable cellForRowAtIndexPath:indexPath];
             UIImageView *bubbleImage=(UIImageView *)[mycell viewWithTag:56];
-            bubbleImage.image=[[UIImage imageNamed:@"Bubbletypeleft_highlight"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+            bubbleImage.image=[[UIImage imageNamed:@"Bubbletypeleft_highlight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         }
     CGPoint touchPoint = [tapGR locationInView:self.view];
     [self.popupMenu showInView:self.view atPoint:touchPoint];

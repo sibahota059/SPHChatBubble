@@ -38,6 +38,17 @@
     
     [self setUpTextFieldforIphone];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -150,8 +161,13 @@
        
         NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
         
-        [self adddBubbledata:@"textByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:@"" msgstatus:@"Sending"];
-        
+        if (sphBubbledata.count%2==0) {
+            [self adddBubbledata:@"textByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:@"" msgstatus:@"Sending"]; 
+        }else{
+            [self adddBubbledata:@"textbyother" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:@"" msgstatus:@"Sending"];
+ 
+        }
+                
         [self performSelector:@selector(messageSent:) withObject:rowNumber afterDelay:2.0];
 }
 
@@ -354,19 +370,19 @@ finishedSavingWithError:(NSError *)error
         }
         
         
-        UIImageView *bubbleImage=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:25 topCapHeight:20]];
+        UIImageView *bubbleImage=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14]];
         bubbleImage.tag=55;
         [cell.contentView addSubview:bubbleImage];
-        [bubbleImage setFrame:CGRectMake(265-itemTextSize.width,5,itemTextSize.width+10,textHeight)];
+        [bubbleImage setFrame:CGRectMake(265-itemTextSize.width,5,itemTextSize.width+14,textHeight+4)];
         
         
-        UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(260 - itemTextSize.width+2,2,itemTextSize.width+15-2, textHeight-2)];
+        UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(260 - itemTextSize.width+5,2,itemTextSize.width+10, textHeight-2)];
         [cell.contentView addSubview:messageTextview];
         messageTextview.editable=NO;
         messageTextview.text = messageText;
         messageTextview.dataDetectorTypes=UIDataDetectorTypeAll;
         messageTextview.textAlignment=NSTextAlignmentJustified;
-        messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:13.0];
+        messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:12.0];
         messageTextview.backgroundColor=[UIColor clearColor];
         messageTextview.tag=indexPath.row;
         cell.Avatar_Image.image=[UIImage imageNamed:@"Customer_icon"];
@@ -427,22 +443,29 @@ finishedSavingWithError:(NSError *)error
             else{
                 
             }
-            
-            UIImageView *bubbleImage=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:15 topCapHeight:15]];
+            //[bubbleImage setFrame:CGRectMake(265-itemTextSize.width,5,itemTextSize.width+14,textHeight+4)];
+            UIImageView *bubbleImage=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:21 topCapHeight:14]];
             [cell.contentView addSubview:bubbleImage];
-            [bubbleImage setFrame:CGRectMake(50,5, itemTextSize.width+10, textHeight)];
+            [bubbleImage setFrame:CGRectMake(50,5, itemTextSize.width+18, textHeight+4)];
             bubbleImage.tag=56;
-            
-            UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(50,0,itemTextSize.width+15, textHeight)];
+            //CGRectMake(260 - itemTextSize.width+5,2,itemTextSize.width+10, textHeight-2)];
+            UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(55,2,itemTextSize.width+10, textHeight-2)];
             [cell.contentView addSubview:messageTextview];
             messageTextview.editable=NO;
             messageTextview.text = messageText;
             messageTextview.dataDetectorTypes=UIDataDetectorTypeAll;
             messageTextview.textAlignment=NSTextAlignmentJustified;
             messageTextview.backgroundColor=[UIColor clearColor];
-            messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:13.0];
+            messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:12.0];
             messageTextview.scrollEnabled=NO;
             messageTextview.tag=indexPath.row;
+            
+            cell.Avatar_Image.layer.cornerRadius = 20.0;
+            cell.Avatar_Image.layer.masksToBounds = YES;
+            cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
+            cell.Avatar_Image.layer.borderWidth = 2.0;
+            [cell.Avatar_Image setupImageViewer];
+            
             cell.Avatar_Image.image=[UIImage imageNamed:@"my_icon"];
             cell.time_Label.text=feed_data.messageTime;
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -455,65 +478,50 @@ finishedSavingWithError:(NSError *)error
             return cell;
         }
         else
-            if ([feed_data.messageType isEqualToString:@"ImageByme"]) {
-                
+            if ([feed_data.messageType isEqualToString:@"ImageByme"])
+            {
                 SPHBubbleCellImage  *cell = (SPHBubbleCellImage *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier3];
-                
                 if (cell == nil)
                 {
                     NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCellImage" owner:self options:nil];
                     cell = [topLevelObjects objectAtIndex:0];
                 }
-                else{
-                    
+                else
+                {
                 }
-                
-                if ([feed_data.messagestatus isEqualToString:@"Sent"]) {
-                    
+                if ([feed_data.messagestatus isEqualToString:@"Sent"])
+                {
                     cell.statusindicator.alpha=0.0;
                     [cell.statusindicator stopAnimating];
                     cell.statusImage.alpha=1.0;
                     [cell.statusImage setImage:[UIImage imageNamed:@"success"]];
                     cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
-                    
-                }else  if ([feed_data.messagestatus isEqualToString:@"Sending"])
-                {
-                    // if you want to give static url
-                    
+                }
+                else
+                    if ([feed_data.messagestatus isEqualToString:@"Sending"])
+                    {
                     cell.message_Image.image=[UIImage imageNamed:@""];
-                    
-                   // if you want to use Image from Server
                     cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
-                    
                     cell.statusImage.alpha=0.0;
                     cell.statusindicator.alpha=1.0;
                     [cell.statusindicator startAnimating];
-                    
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     cell.statusindicator.alpha=0.0;
                     [cell.statusindicator stopAnimating];
                     cell.statusImage.alpha=1.0;
                     [cell.statusImage setImage:[UIImage imageNamed:@"failed"]];
-                    
-                }
-                
+                    }
                 cell.Avatar_Image.layer.cornerRadius = 20.0;
                 cell.Avatar_Image.layer.masksToBounds = YES;
                 cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
                 cell.Avatar_Image.layer.borderWidth = 2.0;
                 [cell.Avatar_Image setupImageViewer];
-                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
-                
-                
-                //[image imageByScalingAndCroppingForSize:CGSizeMake(60, 60)]
+                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
                 [cell.message_Image setupImageViewer];
-                
                 cell.Avatar_Image.image=[UIImage imageNamed:@"Customer_icon"];
-                
                 cell.time_Label.text=feed_data.messageTime;
-                
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
                 return cell;
                 
@@ -533,6 +541,13 @@ finishedSavingWithError:(NSError *)error
                 [cell.message_Image setupImageViewer];
                 cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
                 cell.message_Image.image=[UIImage imageNamed:@"my_icon"];
+                
+                cell.Avatar_Image.layer.cornerRadius = 20.0;
+                cell.Avatar_Image.layer.masksToBounds = YES;
+                cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
+                cell.Avatar_Image.layer.borderWidth = 2.0;
+                [cell.Avatar_Image setupImageViewer];
+                
                 cell.Avatar_Image.image=[UIImage imageNamed:@"my_icon"];
                 cell.time_Label.text=feed_data.messageTime;
                 cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -589,14 +604,14 @@ finishedSavingWithError:(NSError *)error
     {
         SPHBubbleCellOther *mycell=(SPHBubbleCellOther*)[self.sphChatTable cellForRowAtIndexPath:indexPath];
         UIImageView *bubbleImage=(UIImageView *)[mycell viewWithTag:55];
-        bubbleImage.image=[[UIImage imageNamed:@"Bubbletyperight_highlighted"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+        bubbleImage.image=[[UIImage imageNamed:@"Bubbletyperight_highlight"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
         
     }else
         if ([feed_data.messageType isEqualToString:@"textbyother"])
         {
             SPHBubbleCell *mycell=(SPHBubbleCell*)[self.sphChatTable cellForRowAtIndexPath:indexPath];
             UIImageView *bubbleImage=(UIImageView *)[mycell viewWithTag:56];
-            bubbleImage.image=[[UIImage imageNamed:@"Bubbletypeleft_highlighted"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+            bubbleImage.image=[[UIImage imageNamed:@"Bubbletypeleft_highlight"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
         }
     CGPoint touchPoint = [tapGR locationInView:self.view];
     [self.popupMenu showInView:self.view atPoint:touchPoint];
@@ -642,7 +657,7 @@ finishedSavingWithError:(NSError *)error
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
     // get a rect for the textView frame
 	CGRect containerFrame = containerView.frame;
-    containerFrame.origin.y = self.view.bounds.size.height+50 - (keyboardBounds.size.height + containerFrame.size.height);
+    containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
     
     CGRect tableviewframe=self.sphChatTable.frame;
     tableviewframe.size.height-=160;
@@ -666,7 +681,7 @@ finishedSavingWithError:(NSError *)error
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
 	// get a rect for the textView frame
 	CGRect containerFrame = containerView.frame;
-    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height-10;
+    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
     CGRect tableviewframe=self.sphChatTable.frame;
     tableviewframe.size.height+=160;
     

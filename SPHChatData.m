@@ -17,4 +17,7 @@
 @synthesize bubbleImageName;
 @synthesize messageType;
 @synthesize messagestatus;
+@synthesize messageImage;
+@synthesize messagesfrom;
+
 @end

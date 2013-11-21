@@ -67,6 +67,12 @@
 		BA44D5471827CED400DC8E5A /* Bubbletypeleft.png in Resources */ = {isa = PBXBuildFile; fileRef = BA44D5451827CED400DC8E5A /* Bubbletypeleft.png */; };
 		BA44D5481827CED400DC8E5A /* Bubbletypeleft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA44D5461827CED400DC8E5A /* Bubbletypeleft@2x.png */; };
 		BA9E31511823D8BB00E5521E /* Bubbletyperight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA9E314F1823D8BB00E5521E /* Bubbletyperight@2x.png */; };
+		BAF52959183E1E8A0082BCC7 /* MNMPullToRefresh.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAF52951183E1E8A0082BCC7 /* MNMPullToRefresh.strings */; };
+		BAF5295A183E1E8A0082BCC7 /* Loading_Image.png in Resources */ = {isa = PBXBuildFile; fileRef = BAF52952183E1E8A0082BCC7 /* Loading_Image.png */; };
+		BAF5295B183E1E8A0082BCC7 /* MNMPullToRefreshIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = BAF52953183E1E8A0082BCC7 /* MNMPullToRefreshIcon.png */; };
+		BAF5295C183E1E8A0082BCC7 /* MNMPullToRefreshIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BAF52954183E1E8A0082BCC7 /* MNMPullToRefreshIcon@2x.png */; };
+		BAF5295D183E1E8A0082BCC7 /* MNMPullToRefreshManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BAF52956183E1E8A0082BCC7 /* MNMPullToRefreshManager.m */; };
+		BAF5295E183E1E8A0082BCC7 /* MNMPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = BAF52958183E1E8A0082BCC7 /* MNMPullToRefreshView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -147,6 +153,14 @@
 		BA44D5451827CED400DC8E5A /* Bubbletypeleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bubbletypeleft.png; sourceTree = "<group>"; };
 		BA44D5461827CED400DC8E5A /* Bubbletypeleft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bubbletypeleft@2x.png"; sourceTree = "<group>"; };
 		BA9E314F1823D8BB00E5521E /* Bubbletyperight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bubbletyperight@2x.png"; sourceTree = "<group>"; };
+		BAF52951183E1E8A0082BCC7 /* MNMPullToRefresh.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = MNMPullToRefresh.strings; sourceTree = "<group>"; };
+		BAF52952183E1E8A0082BCC7 /* Loading_Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Loading_Image.png; sourceTree = "<group>"; };
+		BAF52953183E1E8A0082BCC7 /* MNMPullToRefreshIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MNMPullToRefreshIcon.png; sourceTree = "<group>"; };
+		BAF52954183E1E8A0082BCC7 /* MNMPullToRefreshIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MNMPullToRefreshIcon@2x.png"; sourceTree = "<group>"; };
+		BAF52955183E1E8A0082BCC7 /* MNMPullToRefreshManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNMPullToRefreshManager.h; sourceTree = "<group>"; };
+		BAF52956183E1E8A0082BCC7 /* MNMPullToRefreshManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNMPullToRefreshManager.m; sourceTree = "<group>"; };
+		BAF52957183E1E8A0082BCC7 /* MNMPullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNMPullToRefreshView.h; sourceTree = "<group>"; };
+		BAF52958183E1E8A0082BCC7 /* MNMPullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNMPullToRefreshView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +183,14 @@
 		BA1445C1181114E5009DAE6D = {
 			isa = PBXGroup;
 			children = (
+				BAF52951183E1E8A0082BCC7 /* MNMPullToRefresh.strings */,
+				BAF52952183E1E8A0082BCC7 /* Loading_Image.png */,
+				BAF52953183E1E8A0082BCC7 /* MNMPullToRefreshIcon.png */,
+				BAF52954183E1E8A0082BCC7 /* MNMPullToRefreshIcon@2x.png */,
+				BAF52955183E1E8A0082BCC7 /* MNMPullToRefreshManager.h */,
+				BAF52956183E1E8A0082BCC7 /* MNMPullToRefreshManager.m */,
+				BAF52957183E1E8A0082BCC7 /* MNMPullToRefreshView.h */,
+				BAF52958183E1E8A0082BCC7 /* MNMPullToRefreshView.m */,
 				BA14465E1811236A009DAE6D /* QuartzCore.framework */,
 				BA14465C18112365009DAE6D /* MobileCoreServices.framework */,
 				BA14465A1811235E009DAE6D /* AssetsLibrary.framework */,
@@ -178,7 +200,6 @@
 				BA14462A18112024009DAE6D /* Images */,
 				BA1445F01811156B009DAE6D /* SPHChatData.h */,
 				BA1445F11811156B009DAE6D /* SPHChatData.m */,
-				BA1445F21811156B009DAE6D /* SPHBubbleCell.h */,
 				BA1446081811157B009DAE6D /* BubbleCell */,
 				BA1445D3181114E5009DAE6D /* SPHChatBubble */,
 				BA1445CC181114E5009DAE6D /* Frameworks */,
@@ -234,6 +255,7 @@
 		BA1446081811157B009DAE6D /* BubbleCell */ = {
 			isa = PBXGroup;
 			children = (
+				BA1445F21811156B009DAE6D /* SPHBubbleCell.h */,
 				BA1445F31811156B009DAE6D /* SPHBubbleCell.m */,
 				BA1445F41811156B009DAE6D /* SPHBubbleCell.xib */,
 				BA1445F51811156B009DAE6D /* SPHBubbleCellOther.xib */,
@@ -412,6 +434,10 @@
 				BA44D5441827A3B200DC8E5A /* Bubbletyperight_highlight@2x.png in Resources */,
 				BA44D5471827CED400DC8E5A /* Bubbletypeleft.png in Resources */,
 				BA44D5481827CED400DC8E5A /* Bubbletypeleft@2x.png in Resources */,
+				BAF52959183E1E8A0082BCC7 /* MNMPullToRefresh.strings in Resources */,
+				BAF5295A183E1E8A0082BCC7 /* Loading_Image.png in Resources */,
+				BAF5295B183E1E8A0082BCC7 /* MNMPullToRefreshIcon.png in Resources */,
+				BAF5295C183E1E8A0082BCC7 /* MNMPullToRefreshIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +463,8 @@
 				BA144656181121B2009DAE6D /* QBPopupMenu.m in Sources */,
 				BA144657181121B2009DAE6D /* QBPopupMenuItem.m in Sources */,
 				BA144658181121B2009DAE6D /* QBPopupMenuOverlayView.m in Sources */,
+				BAF5295D183E1E8A0082BCC7 /* MNMPullToRefreshManager.m in Sources */,
+				BAF5295E183E1E8A0082BCC7 /* MNMPullToRefreshView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

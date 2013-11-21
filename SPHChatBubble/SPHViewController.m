@@ -28,6 +28,10 @@
 @end
 
 @implementation SPHViewController
+
+@synthesize pullToRefreshManager = pullToRefreshManager_;
+@synthesize reloads = reloads_;
+
 @synthesize imgPicker;
 @synthesize Uploadedimage;
 
@@ -48,10 +52,63 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 
-    
+    pullToRefreshManager_ = [[MNMPullToRefreshManager alloc] initWithPullToRefreshViewHeight:60.0f
+                                                                                   tableView:self.sphChatTable
+                                                                                  withClient:self];
+    [self setUpDummyMessages];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
+
+-(void)setUpDummyMessages
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"hh:mm a"];
+    NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
+    [self adddBubbledata:@"textByme" mtext:@"Hi!!!!!!!" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+    [self performSelector:@selector(messageSent:) withObject:rowNumber afterDelay:1.0];
+    [self adddBubbledata:@"textbyother" mtext:@"Heloo!!!!!" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sent"];
+    rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
+    [self adddBubbledata:@"textByme" mtext:@"How are you doing today?" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+    [self performSelector:@selector(messageSent:) withObject:rowNumber afterDelay:1.5];
+    [self adddBubbledata:@"textbyother" mtext:@"I'm doing great! what abt you?" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sent"];
+}
+
+#pragma mark MNMBottomPullToRefreshManagerClient
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [pullToRefreshManager_ tableViewScrolled];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView.contentOffset.y >=360.0f)
+    {
+    }
+    else
+        [pullToRefreshManager_ tableViewReleased];
+}
+
+- (void)pullToRefreshTriggered:(MNMPullToRefreshManager *)manager
+{
+    reloads_++;
+    [self performSelector:@selector(getEarlierMessages) withObject:nil afterDelay:0.0f];
+}
+
+-(void)getEarlierMessages
+{
+    NSLog(@"get Earlir Messages And Appand to Array");
+     [self performSelector:@selector(loadfinished) withObject:nil afterDelay:1];
+}
+
+-(void)loadfinished
+{
+    [pullToRefreshManager_ tableViewReloadFinishedAnimated:YES];
+    [self.sphChatTable reloadData];
+
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -162,9 +219,9 @@
         NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
         
         if (sphBubbledata.count%2==0) {
-            [self adddBubbledata:@"textByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:@"" msgstatus:@"Sending"]; 
+            [self adddBubbledata:@"textByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
         }else{
-            [self adddBubbledata:@"textbyother" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:@"" msgstatus:@"Sending"];
+            [self adddBubbledata:@"textbyother" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
  
         }
                 
@@ -209,6 +266,7 @@
     }
 }
 
+//http://www.binarytribune.com/wp-content/uploads/2013/06/india_binary_options-274x300.png
 
 -(void)imagePickerControllerDidCancel:
 (UIImagePickerController *)picker
@@ -248,8 +306,30 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 		// Code here to support video if enabled
 	}
     
-//    [self performSelector:@selector(uploadToServer) withObject:nil afterDelay:0.1];
+   [self performSelector:@selector(uploadToServer) withObject:nil afterDelay:0.0];
 }
+
+-(void)uploadToServer
+{
+    NSString *chat_Message=textView.text;
+    textView.text=@"";
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"hh:mm a"];
+    
+    NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
+    
+    if (sphBubbledata.count%2==0) {
+        [self adddBubbledata:@"ImageByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+    }else{
+        [self adddBubbledata:@"ImageByother" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+        
+    }
+    
+    [self performSelector:@selector(messageSent:) withObject:rowNumber afterDelay:1.0];
+}
+
 
 
 -(void)image:(UIImage *)image
@@ -495,13 +575,14 @@ finishedSavingWithError:(NSError *)error
                     [cell.statusindicator stopAnimating];
                     cell.statusImage.alpha=1.0;
                     [cell.statusImage setImage:[UIImage imageNamed:@"success"]];
-                    cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
+                   // cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
+                    
                 }
                 else
                     if ([feed_data.messagestatus isEqualToString:@"Sending"])
                     {
                     cell.message_Image.image=[UIImage imageNamed:@""];
-                    cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
+                    //cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
                     cell.statusImage.alpha=0.0;
                     cell.statusindicator.alpha=1.0;
                     [cell.statusindicator startAnimating];
@@ -513,12 +594,13 @@ finishedSavingWithError:(NSError *)error
                     cell.statusImage.alpha=1.0;
                     [cell.statusImage setImage:[UIImage imageNamed:@"failed"]];
                     }
+                cell.message_Image.image=Uploadedimage.image;
                 cell.Avatar_Image.layer.cornerRadius = 20.0;
                 cell.Avatar_Image.layer.masksToBounds = YES;
                 cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
                 cell.Avatar_Image.layer.borderWidth = 2.0;
                 [cell.Avatar_Image setupImageViewer];
-                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+              //  cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
                 [cell.message_Image setupImageViewer];
                 cell.Avatar_Image.image=[UIImage imageNamed:@"Customer_icon"];
                 cell.time_Label.text=feed_data.messageTime;
@@ -539,8 +621,8 @@ finishedSavingWithError:(NSError *)error
                 }
                 
                 [cell.message_Image setupImageViewer];
-                cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
-                cell.message_Image.image=[UIImage imageNamed:@"my_icon"];
+               // cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+                cell.message_Image.imageURL=[NSURL URLWithString:@"http://www.binarytribune.com/wp-content/uploads/2013/06/india_binary_options-274x300.png"];
                 
                 cell.Avatar_Image.layer.cornerRadius = 20.0;
                 cell.Avatar_Image.layer.masksToBounds = YES;
@@ -558,11 +640,12 @@ finishedSavingWithError:(NSError *)error
 }
 
 
--(void)adddBubbledata:(NSString*)messageType  mtext:(NSString*)messagetext mtime:(NSString*)messageTime mimage:(NSString*)messageImage  msgstatus:(NSString*)status;
+-(void)adddBubbledata:(NSString*)messageType  mtext:(NSString*)messagetext mtime:(NSString*)messageTime mimage:(UIImage*)messageImage  msgstatus:(NSString*)status;
 {
     SPHChatData *feed_data=[[SPHChatData alloc]init];
     feed_data.messageText=messagetext;
-    feed_data.messageImageURL=messageImage;
+    feed_data.messageImageURL=messagetext;
+    feed_data.messageImage=messageImage;
     feed_data.messageTime=messageTime;
     feed_data.messageType=messageType;
     feed_data.messagestatus=status;
@@ -572,11 +655,12 @@ finishedSavingWithError:(NSError *)error
     [self performSelector:@selector(scrollTableview) withObject:nil afterDelay:0.0];
 }
 
--(void)adddBubbledataatIndex:(NSInteger)rownum messagetype:(NSString*)messageType  mtext:(NSString*)messagetext mtime:(NSString*)messageTime mimage:(NSString*)messageImage  msgstatus:(NSString*)status;
+-(void)adddBubbledataatIndex:(NSInteger)rownum messagetype:(NSString*)messageType  mtext:(NSString*)messagetext mtime:(NSString*)messageTime mimage:(UIImage*)messageImage  msgstatus:(NSString*)status;
 {
     SPHChatData *feed_data=[[SPHChatData alloc]init];
     feed_data.messageText=messagetext;
-    feed_data.messageImageURL=messageImage;
+    feed_data.messageImageURL=messagetext;
+     feed_data.messageImage=messageImage;
     feed_data.messageTime=messageTime;
     feed_data.messageType=messageType;
     feed_data.messagestatus=status;

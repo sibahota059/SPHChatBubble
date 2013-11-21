@@ -17,5 +17,7 @@
 @property(nonatomic,retain)NSString *bubbleImageName;
 @property(nonatomic,retain)NSString *messageType;
 @property(nonatomic,retain)NSString *messagestatus;
+@property(nonatomic,retain)NSString *messagesfrom;
+@property(nonatomic,retain)UIImage *messageImage;
 
 @end

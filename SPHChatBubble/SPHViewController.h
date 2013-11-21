@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "HPGrowingTextView.h"
+#import "MNMPullToRefreshManager.h"
 
 @class QBPopupMenu;
 
-@interface SPHViewController : UIViewController<HPGrowingTextViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface SPHViewController : UIViewController<HPGrowingTextViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MNMPullToRefreshManagerClient>
 {
      NSMutableArray *sphBubbledata;
      UIView *containerView;
@@ -19,6 +20,9 @@
      int selectedRow;
      BOOL newMedia;
 }
+@property (nonatomic, readwrite, assign) NSUInteger reloads;
+@property (nonatomic, readwrite, strong) MNMPullToRefreshManager *pullToRefreshManager;
+
 @property (weak, nonatomic) IBOutlet UIImageView *Uploadedimage;
 @property (nonatomic, strong) QBPopupMenu *popupMenu;
 @property (weak, nonatomic) IBOutlet UITableView *sphChatTable;

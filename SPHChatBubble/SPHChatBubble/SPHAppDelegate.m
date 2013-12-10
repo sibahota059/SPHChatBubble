@@ -7,17 +7,37 @@
 //
 
 #import "SPHAppDelegate.h"
-
+#import <objc/runtime.h>
 #import "SPHViewController.h"
 
+
+@implementation UIApplication (Private)
+
+- (BOOL)customOpenURL:(NSURL*)url
+{
+    SPHAppDelegate *MyWatcher = [[UIApplication sharedApplication] delegate];
+    if (MyWatcher.currentViewController) {
+        [MyWatcher.currentViewController handleURL:url];
+        return YES;
+    }
+    return NO;
+}
+
+@end
+
+
 @implementation SPHAppDelegate
+
+@synthesize currentViewController=_currentViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.viewController = [[SPHViewController alloc] initWithNibName:@"SPHViewController" bundle:nil];
-    self.window.rootViewController = self.viewController;
+    UINavigationController *navc=[[UINavigationController alloc]initWithRootViewController:self.viewController];
+    navc.navigationBarHidden=YES;
+    self.window.rootViewController = navc;
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -41,6 +61,10 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    Method customOpenUrl = class_getInstanceMethod([UIApplication class], @selector(customOpenURL:));
+    Method openUrl = class_getInstanceMethod([UIApplication class], @selector(openURL:));
+    
+    method_exchangeImplementations(openUrl, customOpenUrl);
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 

@@ -11,9 +11,13 @@
 @class SPHViewController;
 
 @interface SPHAppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+    id currentViewController;
+}
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) SPHViewController *viewController;
+
+@property (nonatomic, assign) id currentViewController;
 
 @end

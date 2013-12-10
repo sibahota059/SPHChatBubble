@@ -8,7 +8,7 @@
 
 #import "SPHViewController.h"
 #import "SPHChatData.h"
-
+#import "WebViewController.h"
 #import "SPHChatData.h"
 #import "SPHBubbleCell.h"
 #import "SPHBubbleCellImage.h"
@@ -20,7 +20,7 @@
 #import "QBPopupMenu.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-
+#import "SPHAppDelegate.h"
 #define messageWidth 260
 
 @interface SPHViewController ()
@@ -38,6 +38,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    SPHAppDelegate *MyWatcher = [[UIApplication sharedApplication] delegate];
+    MyWatcher.currentViewController = self;
+    
     sphBubbledata=[[NSMutableArray alloc]init];
     
     [self setUpTextFieldforIphone];
@@ -59,6 +63,13 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
+
+- (void)handleURL:(NSURL*)url
+{
+    WebViewController *controller = [[[WebViewController alloc] initWithURL:url] autorelease];
+    [controller setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:controller animated:YES];
+}
 
 -(void)setUpDummyMessages
 {

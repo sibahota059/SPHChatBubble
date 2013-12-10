@@ -30,4 +30,6 @@
 
 - (IBAction)endViewedit:(id)sender;
 
+- (void) handleURL:(NSURL *)url;
+
 @end

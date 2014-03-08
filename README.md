@@ -32,8 +32,6 @@ It's easy.
 - [Send a PR](https://help.github.com/articles/using-pull-requests  )
 - be a Part of a job which can help a lot of beginers.
 
-IF YOU MAKE CHANGES IN DIFFERENT FILES AND MAKE ONLY 1 'COMMIT' IT WON'T HAVE AN APPROPRIATE 'COMMIT TITLE'. MAKE SURE YOU COMMIT EVERY MINOR CHANGE.
-
 thanks.
 
 ### Contribute: I'd love to include your contributions. Feel free to improve it, send comments or suggestions. Please let me know if you have great idea on it.

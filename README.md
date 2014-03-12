@@ -1,7 +1,7 @@
 ### SPHChatBubble
 =============
 
-Sphchatbubble to use in chat screens.
+Sphchatbubble to use in chat screens. (Supports iOS 7)
 
 
 This project is an attempt to create the experience of chat bubbles with image , time and avatar support.

@@ -1,3 +1,10 @@
+
+### Get the Updated version Here
+
+https://github.com/sibahota059/SPHChatCollectionView
+
+
+
 ### SPHChatBubble
 =============
 

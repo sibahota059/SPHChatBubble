@@ -107,7 +107,7 @@
     
     
     UITapGestureRecognizer *singleFingerTap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
+    [[UITapGestureRecognizer alloc] initWithTarget:ViewControllerObject action:@selector(tapRecognized:)];
     [messageTextview addGestureRecognizer:singleFingerTap];
     singleFingerTap.delegate = ViewControllerObject;
 }

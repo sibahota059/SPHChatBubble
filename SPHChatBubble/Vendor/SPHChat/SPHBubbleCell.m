@@ -87,7 +87,7 @@
     self.time_Label.text=feed_data.messageTime;
     self.selectionStyle=UITableViewCellSelectionStyleNone;
     
-    UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
+    UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:ViewControllerObject action:@selector(tapRecognized:)];
     [messageTextview addGestureRecognizer:singleFingerTap];
     singleFingerTap.delegate = ViewControllerObject;
 }

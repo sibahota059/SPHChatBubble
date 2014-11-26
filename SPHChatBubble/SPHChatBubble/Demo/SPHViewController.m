@@ -21,7 +21,10 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "SPHAppDelegate.h"
-#define messageWidth 260
+
+
+
+
 
 @interface SPHViewController ()
 
@@ -76,14 +79,14 @@
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"hh:mm a"];
-    NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
-    [self adddBubbledata:@"textByme" mtext:@"Hi!!!!!!!" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+    NSString *rowNumber=[NSString stringWithFormat:@"%d",(int)sphBubbledata.count];
+    [self adddBubbledata:ktextByme mtext:@"Hi!!!!!!!" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSeding];
     [self performSelector:@selector(messageSent:) withObject:rowNumber afterDelay:1.0];
-    [self adddBubbledata:@"textbyother" mtext:@"Heloo!!!!!" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sent"];
-    rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
-    [self adddBubbledata:@"textByme" mtext:@"How are you doing today?" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+    [self adddBubbledata:ktextbyother mtext:@"Heloo!!!!!" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSent];
+    rowNumber=[NSString stringWithFormat:@"%d",(int)sphBubbledata.count];
+    [self adddBubbledata:ktextByme mtext:@"How are you doing today?" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSeding];
     [self performSelector:@selector(messageSent:) withObject:rowNumber afterDelay:1.5];
-    [self adddBubbledata:@"textbyother" mtext:@"I'm doing great! what abt you?" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sent"];
+    [self adddBubbledata:ktextbyother mtext:@"I'm doing great! what abt you?" mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSent];
 }
 
 #pragma mark MNMBottomPullToRefreshManagerClient
@@ -227,12 +230,12 @@
         
         [formatter setDateFormat:@"hh:mm a"];
        
-        NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
+        NSString *rowNumber=[NSString stringWithFormat:@"%d",(int)sphBubbledata.count];
         
         if (sphBubbledata.count%2==0) {
-            [self adddBubbledata:@"textByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+            [self adddBubbledata:ktextByme mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSeding];
         }else{
-            [self adddBubbledata:@"textbyother" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+            [self adddBubbledata:ktextbyother mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSeding];
  
         }
                 
@@ -244,17 +247,14 @@
 -(IBAction)messageSent:(id)sender
 {
     NSLog(@"row= %@", sender);
-    
-   
     SPHChatData *feed_data=[[SPHChatData alloc]init];
     feed_data=[sphBubbledata objectAtIndex:[sender intValue]];
     feed_data.messagestatus=@"Sent";
-    [sphBubbledata  removeObjectAtIndex:[sender intValue]];
-    [sphBubbledata insertObject:feed_data atIndex:[sender intValue]];
-    [self.sphChatTable reloadData];
-
+    [sphBubbledata replaceObjectAtIndex:[sender intValue] withObject:feed_data ];
     
-    
+    NSIndexPath* rowToReload = [NSIndexPath indexPathForRow:[sender intValue] inSection:0];
+    NSArray* rowsToReload = [NSArray arrayWithObjects:rowToReload, nil];
+    [self.sphChatTable reloadRowsAtIndexPaths:rowsToReload withRowAnimation:UITableViewRowAnimationNone];
 }
 
 
@@ -329,12 +329,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     [formatter setDateFormat:@"hh:mm a"];
     
-    NSString *rowNumber=[NSString stringWithFormat:@"%d",sphBubbledata.count];
+    NSString *rowNumber=[NSString stringWithFormat:@"%d",(int)sphBubbledata.count];
     
     if (sphBubbledata.count%2==0) {
-        [self adddBubbledata:@"ImageByme" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+        [self adddBubbledata:kImageByme mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSeding];
     }else{
-        [self adddBubbledata:@"ImageByother" mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:@"Sending"];
+        [self adddBubbledata:kImageByOther mtext:chat_Message mtime:[formatter stringFromDate:date] mimage:Uploadedimage.image msgstatus:kStatusSeding];
         
     }
     
@@ -374,7 +374,7 @@ finishedSavingWithError:(NSError *)error
     SPHChatData *feed_data=[[SPHChatData alloc]init];
     feed_data=[sphBubbledata objectAtIndex:indexPath.row];
     
-    if ([feed_data.messageType isEqualToString:@"textByme"]||[feed_data.messageType isEqualToString:@"textbyother"])
+    if ([feed_data.messageType isEqualToString:ktextByme]||[feed_data.messageType isEqualToString:ktextbyother])
     {
         float cellHeight;
         // text
@@ -411,243 +411,66 @@ finishedSavingWithError:(NSError *)error
 {
     SPHChatData *feed_data=[[SPHChatData alloc]init];
     feed_data=[sphBubbledata objectAtIndex:indexPath.row];
-    NSString *messageText = feed_data.messageText;
     
     static NSString *CellIdentifier1 = @"Cell1";
     static NSString *CellIdentifier2 = @"Cell2";
     static NSString *CellIdentifier3 = @"Cell3";
     static NSString *CellIdentifier4 = @"Cell4";
     
-    CGSize boundingSize = CGSizeMake(messageWidth-20, 10000000);
-    CGSize itemTextSize = [messageText sizeWithFont:[UIFont systemFontOfSize:14]
-                                  constrainedToSize:boundingSize
-                                      lineBreakMode:NSLineBreakByWordWrapping];
-    float textHeight = itemTextSize.height+7;
-    int x=0;
-    if (textHeight>200)
+    if ([feed_data.messageType isEqualToString:ktextByme])
     {
-        x=65;
-    }else
-        if (textHeight>150)
-        {
-            x=50;
-        }
-        else if (textHeight>80)
-        {
-            x=30;
-        }else
-            if (textHeight>50)
-            {
-                x=20;
-            }else
-                if (textHeight>30) {
-                    x=8;
-                }
-    
-    // Types= ImageByme  , imageByOther  textByme  ,textbyother
-    
-    if ([feed_data.messageType isEqualToString:@"textByme"]) {
-        
-        
-        
         SPHBubbleCellOther  *cell = (SPHBubbleCellOther *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier1];
-        
         if (cell == nil) {
             NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCellOther" owner:self options:nil];
             cell = [topLevelObjects objectAtIndex:0];
         }
-        else{
-            
-        }
         
-        
-        UIImageView *bubbleImage=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14]];
-        bubbleImage.tag=55;
-        [cell.contentView addSubview:bubbleImage];
-        [bubbleImage setFrame:CGRectMake(265-itemTextSize.width,5,itemTextSize.width+14,textHeight+4)];
-        
-        
-        UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(260 - itemTextSize.width+5,2,itemTextSize.width+10, textHeight-2)];
-        [cell.contentView addSubview:messageTextview];
-        messageTextview.editable=NO;
-        messageTextview.text = messageText;
-        messageTextview.dataDetectorTypes=UIDataDetectorTypeAll;
-        messageTextview.textAlignment=NSTextAlignmentJustified;
-        messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:12.0];
-        messageTextview.backgroundColor=[UIColor clearColor];
-        messageTextview.tag=indexPath.row;
-        cell.Avatar_Image.image=[UIImage imageNamed:@"Customer_icon"];
-        
-       
-        
-        cell.time_Label.text=feed_data.messageTime;
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
-        messageTextview.scrollEnabled=NO;
-        
+        [cell SetCellData:feed_data targetedView:self Atrow:indexPath.row];
         [cell.Avatar_Image setupImageViewer];
-        if ([feed_data.messagestatus isEqualToString:@"Sent"]) {
-            
-            cell.statusindicator.alpha=0.0;
-            [cell.statusindicator stopAnimating];
-            cell.statusImage.alpha=1.0;
-            [cell.statusImage setImage:[UIImage imageNamed:@"success"]];
-            
-        }else  if ([feed_data.messagestatus isEqualToString:@"Sending"])
-        {
-            cell.statusImage.alpha=0.0;
-            cell.statusindicator.alpha=1.0;
-            [cell.statusindicator startAnimating];
-            
-        }
-        else
-        {
-            cell.statusindicator.alpha=0.0;
-            [cell.statusindicator stopAnimating];
-            cell.statusImage.alpha=1.0;
-            [cell.statusImage setImage:[UIImage imageNamed:@"failed"]];
-            
-        }
-        
-        cell.Avatar_Image.layer.cornerRadius = 20.0;
-        cell.Avatar_Image.layer.masksToBounds = YES;
-        cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
-        cell.Avatar_Image.layer.borderWidth = 2.0;
-        
-        
-        UITapGestureRecognizer *singleFingerTap =
-        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
-        [messageTextview addGestureRecognizer:singleFingerTap];
-        singleFingerTap.delegate = self;
         
         return cell;
     }
-    else
-        if ([feed_data.messageType isEqualToString:@"textbyother"]) {
-            
-            
-            SPHBubbleCell  *cell = (SPHBubbleCell *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier2];
-            
-            if (cell == nil) {
-                NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCell" owner:self options:nil];
-                cell = [topLevelObjects objectAtIndex:0];
-            }
-            else{
-                
-            }
-            //[bubbleImage setFrame:CGRectMake(265-itemTextSize.width,5,itemTextSize.width+14,textHeight+4)];
-            UIImageView *bubbleImage=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:21 topCapHeight:14]];
-            [cell.contentView addSubview:bubbleImage];
-            [bubbleImage setFrame:CGRectMake(50,5, itemTextSize.width+18, textHeight+4)];
-            bubbleImage.tag=56;
-            //CGRectMake(260 - itemTextSize.width+5,2,itemTextSize.width+10, textHeight-2)];
-            UITextView *messageTextview=[[UITextView alloc]initWithFrame:CGRectMake(60,2,itemTextSize.width+10, textHeight-2)];
-            [cell.contentView addSubview:messageTextview];
-            messageTextview.editable=NO;
-            messageTextview.text = messageText;
-            messageTextview.dataDetectorTypes=UIDataDetectorTypeAll;
-            messageTextview.textAlignment=NSTextAlignmentJustified;
-            messageTextview.backgroundColor=[UIColor clearColor];
-            messageTextview.font=[UIFont fontWithName:@"Helvetica Neue" size:12.0];
-            messageTextview.scrollEnabled=NO;
-            messageTextview.tag=indexPath.row;
-            messageTextview.textColor=[UIColor whiteColor];
-            cell.Avatar_Image.layer.cornerRadius = 20.0;
-            cell.Avatar_Image.layer.masksToBounds = YES;
-            cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
-            cell.Avatar_Image.layer.borderWidth = 2.0;
-            [cell.Avatar_Image setupImageViewer];
-            
-            cell.Avatar_Image.image=[UIImage imageNamed:@"my_icon"];
-            cell.time_Label.text=feed_data.messageTime;
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-            
-            UITapGestureRecognizer *singleFingerTap =
-            [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
-            [messageTextview addGestureRecognizer:singleFingerTap];
-            singleFingerTap.delegate = self;
-            
-            return cell;
+    
+    if ([feed_data.messageType isEqualToString:ktextbyother])
+    {
+        SPHBubbleCell  *cell = (SPHBubbleCell *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier2];
+        
+        if (cell == nil)
+        {
+            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCell" owner:self options:nil];
+            cell = [topLevelObjects objectAtIndex:0];
         }
-        else
-            if ([feed_data.messageType isEqualToString:@"ImageByme"])
-            {
-                SPHBubbleCellImage  *cell = (SPHBubbleCellImage *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier3];
-                if (cell == nil)
-                {
-                    NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCellImage" owner:self options:nil];
-                    cell = [topLevelObjects objectAtIndex:0];
-                }
-                else
-                {
-                }
-                if ([feed_data.messagestatus isEqualToString:@"Sent"])
-                {
-                    cell.statusindicator.alpha=0.0;
-                    [cell.statusindicator stopAnimating];
-                    cell.statusImage.alpha=1.0;
-                    [cell.statusImage setImage:[UIImage imageNamed:@"success"]];
-                   // cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
-                    
-                }
-                else
-                    if ([feed_data.messagestatus isEqualToString:@"Sending"])
-                    {
-                    cell.message_Image.image=[UIImage imageNamed:@""];
-                    //cell.message_Image.imageURL=[NSURL URLWithString:feed_data.messageImageURL];
-                    cell.statusImage.alpha=0.0;
-                    cell.statusindicator.alpha=1.0;
-                    [cell.statusindicator startAnimating];
-                    }
-                    else
-                    {
-                    cell.statusindicator.alpha=0.0;
-                    [cell.statusindicator stopAnimating];
-                    cell.statusImage.alpha=1.0;
-                    [cell.statusImage setImage:[UIImage imageNamed:@"failed"]];
-                    }
-                cell.message_Image.image=Uploadedimage.image;
-                cell.Avatar_Image.layer.cornerRadius = 20.0;
-                cell.Avatar_Image.layer.masksToBounds = YES;
-                cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
-                cell.Avatar_Image.layer.borderWidth = 2.0;
-                [cell.Avatar_Image setupImageViewer];
-              //  cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletyperight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
-                [cell.message_Image setupImageViewer];
-                cell.Avatar_Image.image=[UIImage imageNamed:@"Customer_icon"];
-                cell.time_Label.text=feed_data.messageTime;
-                cell.selectionStyle=UITableViewCellSelectionStyleNone;
-                return cell;
-                
-            }else{
-                
-                
-                SPHBubbleCellImageOther  *cell = (SPHBubbleCellImageOther *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier4];
-                if (cell == nil)
-                {
-                    NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCellImageOther" owner:self options:nil];
-                    cell = [topLevelObjects objectAtIndex:0];
-                }
-                else{
-                    
-                }
-                
-                [cell.message_Image setupImageViewer];
-               // cell.Buble_image.image= [[UIImage imageNamed:@"Bubbletypeleft"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
-                cell.message_Image.imageURL=[NSURL URLWithString:@"http://www.binarytribune.com/wp-content/uploads/2013/06/india_binary_options-274x300.png"];
-                
-                cell.Avatar_Image.layer.cornerRadius = 20.0;
-                cell.Avatar_Image.layer.masksToBounds = YES;
-                cell.Avatar_Image.layer.borderColor = [UIColor whiteColor].CGColor;
-                cell.Avatar_Image.layer.borderWidth = 2.0;
-                [cell.Avatar_Image setupImageViewer];
-                
-                cell.Avatar_Image.image=[UIImage imageNamed:@"my_icon"];
-                cell.time_Label.text=feed_data.messageTime;
-                cell.selectionStyle=UITableViewCellSelectionStyleNone;
-                return cell;
-            }
+        
+        [cell SetCellData:feed_data targetedView:self Atrow:indexPath.row];
+        [cell.Avatar_Image setupImageViewer];
+        return cell;
+    }
     
+    if ([feed_data.messageType isEqualToString:kImageByme])
+    {
+        SPHBubbleCellImage  *cell = (SPHBubbleCellImage *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier3];
+        if (cell == nil)
+        {
+            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCellImage" owner:self options:nil];
+            cell = [topLevelObjects objectAtIndex:0];
+        }
+        [cell SetCellData:feed_data];
+        [cell.Avatar_Image setupImageViewer];
+        cell.message_Image.image=Uploadedimage.image;
+        [cell.message_Image setupImageViewer];
+        return cell;
+    }
     
+    SPHBubbleCellImageOther  *cell = (SPHBubbleCellImageOther *)[self.sphChatTable dequeueReusableCellWithIdentifier:CellIdentifier4];
+    if (cell == nil)
+    {
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SPHBubbleCellImageOther" owner:self options:nil];
+        cell = [topLevelObjects objectAtIndex:0];
+    }
+    [cell.message_Image setupImageViewer];
+    [cell.Avatar_Image setupImageViewer];
+     cell.message_Image.imageURL=[NSURL URLWithString:@"http://www.binarytribune.com/wp-content/uploads/2013/06/india_binary_options-274x300.png"];
+    return cell;
 }
 
 
@@ -660,10 +483,19 @@ finishedSavingWithError:(NSError *)error
     feed_data.messageTime=messageTime;
     feed_data.messageType=messageType;
     feed_data.messagestatus=status;
-    [sphBubbledata addObject:feed_data];
-    [self.sphChatTable reloadData];
+   
     
-    [self performSelector:@selector(scrollTableview) withObject:nil afterDelay:0.0];
+    NSArray *insertIndexPaths = [NSArray arrayWithObject:
+                                 [NSIndexPath indexPathForRow:
+                                  [sphBubbledata count] // is also 1 now, hooray
+                                                    inSection:0]];
+    
+     [sphBubbledata addObject:feed_data];
+    
+    [[self sphChatTable] insertRowsAtIndexPaths:insertIndexPaths
+                            withRowAnimation:UITableViewRowAnimationNone];
+    
+    [self performSelector:@selector(scrollTableview) withObject:nil afterDelay:0.1];
 }
 
 -(void)adddBubbledataatIndex:(NSInteger)rownum messagetype:(NSString*)messageType  mtext:(NSString*)messagetext mtime:(NSString*)messageTime mimage:(UIImage*)messageImage  msgstatus:(NSString*)status;
@@ -675,11 +507,15 @@ finishedSavingWithError:(NSError *)error
     feed_data.messageTime=messageTime;
     feed_data.messageType=messageType;
     feed_data.messagestatus=status;
-    [sphBubbledata  removeObjectAtIndex:rownum];
-    [sphBubbledata insertObject:feed_data atIndex:rownum];
-    [self.sphChatTable reloadData];
+    [sphBubbledata  replaceObjectAtIndex:rownum withObject:feed_data];
+   
+    NSIndexPath* rowToReload = [NSIndexPath indexPathForRow:rownum inSection:0];
+    NSArray* rowsToReload = [NSArray arrayWithObjects:rowToReload, nil];
+    [self.sphChatTable reloadRowsAtIndexPaths:rowsToReload withRowAnimation:UITableViewRowAnimationNone];
+
     
-    [self performSelector:@selector(scrollTableview) withObject:nil afterDelay:0.0];
+    
+    [self performSelector:@selector(scrollTableview) withObject:nil afterDelay:0.1];
 }
 
 
@@ -692,17 +528,17 @@ finishedSavingWithError:(NSError *)error
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:theTextView.tag inSection:0];
     SPHChatData *feed_data=[[SPHChatData alloc]init];
     feed_data=[sphBubbledata objectAtIndex:indexPath.row];
-    selectedRow=indexPath.row;
+    selectedRow=(int)indexPath.row;
     [self.sphChatTable reloadData];
     
-    if ([feed_data.messageType isEqualToString:@"textByme"])
+    if ([feed_data.messageType isEqualToString:ktextByme])
     {
         SPHBubbleCellOther *mycell=(SPHBubbleCellOther*)[self.sphChatTable cellForRowAtIndexPath:indexPath];
         UIImageView *bubbleImage=(UIImageView *)[mycell viewWithTag:55];
         bubbleImage.image=[[UIImage imageNamed:@"Bubbletyperight_highlight"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
     }else
-        if ([feed_data.messageType isEqualToString:@"textbyother"])
+        if ([feed_data.messageType isEqualToString:ktextbyother])
         {
             SPHBubbleCell *mycell=(SPHBubbleCell*)[self.sphChatTable cellForRowAtIndexPath:indexPath];
             UIImageView *bubbleImage=(UIImageView *)[mycell viewWithTag:56];
@@ -729,9 +565,11 @@ finishedSavingWithError:(NSError *)error
 
 -(void)scrollTableview
 {
-    [self.sphChatTable reloadData];
-    int lastSection=[self.sphChatTable numberOfSections]-1;
-    int lastRowNumber = [self.sphChatTable numberOfRowsInSection:lastSection]-1;
+    if (sphBubbledata.count<3)
+        return;
+    
+    NSInteger lastSection=[self.sphChatTable numberOfSections]-1;
+    NSInteger lastRowNumber = [self.sphChatTable numberOfRowsInSection:lastSection]-1;
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:lastSection];
     [self.sphChatTable scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
@@ -739,10 +577,9 @@ finishedSavingWithError:(NSError *)error
 
 -(void) keyboardWillShow:(NSNotification *)note
 {
-    if (sphBubbledata.count>2) {
-        
+    if (sphBubbledata.count>2)
         [self performSelector:@selector(scrollTableview) withObject:nil afterDelay:0.0];
-    }
+   
     // get keyboard size and loctaion
 	CGRect keyboardBounds;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];

@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SPHChatData.h"
+
 
 @interface SPHBubbleCellImage : UITableViewCell
 
@@ -16,5 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *time_Label;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *statusindicator;
 @property (weak, nonatomic) IBOutlet UIImageView *statusImage;
+
+-(void)SetCellData:(SPHChatData *)feed_data;
 
 @end

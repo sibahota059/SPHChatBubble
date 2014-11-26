@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>262CD289-3E9A-4BD4-948B-B6163D5FA8B8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SPHChatBubble</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>33B51F4058FAF625FDE5D2EF5E32F0E1FAAC86BB</key>
+		<string>https://github.com/sibahota059/SPHChatBubble.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SPHChatBubble/SPHChatBubble.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>33B51F4058FAF625FDE5D2EF5E32F0E1FAAC86BB</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/sibahota059/SPHChatBubble.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>33B51F4058FAF625FDE5D2EF5E32F0E1FAAC86BB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>33B51F4058FAF625FDE5D2EF5E32F0E1FAAC86BB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SPHChatBubble</string>
+		</dict>
+	</array>
+</dict>
+</plist>

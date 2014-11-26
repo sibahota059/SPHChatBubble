@@ -117,7 +117,7 @@ typedef enum {
                                                   otherButtonTitles:@"Open with Safari", nil];
 
   [actionSheet showInView:self.navigationController.view];
-  [actionSheet release];
+  
 }
 
 - (void)actionSheet:(UIActionSheet *)as clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -172,15 +172,15 @@ typedef enum {
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityView startAnimating];
     newItem = [[UIBarButtonItem alloc] initWithCustomView:activityView];
-    [activityView release];
+    
   }
   else {
-    newItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)] autorelease];
+    newItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)];
   }
 
   [items replaceObjectAtIndex:12 withObject:newItem];
   [toolbar setItems:items animated:false];
-  [items release];
+ 
 
   // workaround to change toolbar state
   backButton.enabled = true;
@@ -194,17 +194,6 @@ typedef enum {
 
 #pragma mark -
 
-- (void)dealloc
-{
-  [webView release];
-  [url release];
-  [toolbar release];
 
-  [backButton release];
-  [forwardButton release];
-  [actionButton release];
-
-  [super dealloc];
-}
 
 @end

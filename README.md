@@ -1,6 +1,8 @@
 
 ### Get the Updated version Here
 
+[![Join the chat at https://gitter.im/sibahota059/SPHChatBubble](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sibahota059/SPHChatBubble?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 https://github.com/sibahota059/SPHChatCollectionView
 
 
